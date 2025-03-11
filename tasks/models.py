@@ -1,26 +1,53 @@
 from django.db import models
 
-
 class User(models.Model):
- IMPORTANCE_OF_TASKS = [
-     ("E", "easy"),
-     ("N", "normal"),
-     ("D", "difficult"),
-     ]
- name = models.CharField(max_length=100)
- importance = models.CharField(choices=IMPORTANCE_OF_TASKS, default="E", max_length=1)
+    name = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.name
 
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
 
+    def __str__(self):
+        return self.name
 
+class Task(models.Model):
+    STATUS_CHOICES = [
+        ('todo', 'To Do'),
+        ('in_progress', 'In Progress'),
+        ('done', 'Done'),
+    ]
+    IMPORTANCE_CHOICES = [
+        ("E", "Easy"),
+        ("N", "Normal"),
+        ("D", "Difficult"),
+    ]
 
-class Title(models.Model):
-    task_name = models.CharField(max_length=100)
+    # Core fields
+    title = models.CharField(max_length=100)  # Replaces "Title" model
+    description = models.TextField(blank=True)  # Replaces "Description" model
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='todo'
+    )
+    importance = models.CharField(
+        max_length=1,
+        choices=IMPORTANCE_CHOICES,
+        default='E'
+    )
 
-class Description(models.Model):
-    task_description = models.CharField(max_length=100)
+    # Relationships
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+    user = (models.ForeignKey(User, on_delete=models.CASCADE
+    ))
 
-def main():
- pass
-if __name__ == "__main__":
- main()
+    def __str__(self):
+        return self.title
