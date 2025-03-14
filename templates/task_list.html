@@ -1,0 +1,21 @@
+
+{% extends "index.html" %}
+
+{% block title %}Task list{% endblock %}
+
+{% block content %}
+    <a href="{% url 'create_task' %}" class="btn btn-primary mb-3">create task</a>
+    <ul class="list-group">
+        {% for task in tasks %}
+            <li class="list-group-item">
+                <h5>{{ task.title }} <small class="text-muted">({{ task.status }})</small></h5>
+                <p>{{ task.description }}</p>
+                <div class="btn-group">
+                    <a href="{% url 'task_detail' task.id %}" class="btn btn-sm btn-info">Details</a>
+                    <a href="{% url 'update_task' task.id %}" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="{% url 'delete_task' task.id %}" class="btn btn-sm btn-danger">Delete</a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
